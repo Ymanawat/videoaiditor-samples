@@ -161,7 +161,7 @@ def get_position_and_scale(container_center, asset_url, z_index, fit_dimension='
 
 only_actor_time = 5000
 
-def create_video_json(actor_video_url, total_duration, assets, background_color_hex="#000000"):
+def create_video_json(actor_video_url, total_duration, assets, captions_clip=None, background_color_hex="#000000"):
     # Download files first...
     print("Caching actor video...")
     download_and_cache(actor_video_url)
@@ -333,6 +333,10 @@ def create_video_json(actor_video_url, total_duration, assets, background_color_
         "size": actor_end["size"]
     })
     
+    # Add caption clip if provided
+    if captions_clip:
+        clips.append(captions_clip)
+    
     result = {
         "metadata": {
             "backgroundColor": background_color_hex,  # Updated to use passed background color
@@ -455,7 +459,7 @@ def monitor_render_progress(render_id: str, max_attempts: int = 60) -> Optional[
     return None
 
 
-def create_and_render_video(actor_url: str, total_duration: int, assets: list) -> Optional[str]:
+def create_and_render_video(actor_url: str, total_duration: int, assets: list, captions_clip: dict = None) -> Optional[str]:
     """
     Create video JSON and initiate rendering
     
@@ -463,7 +467,7 @@ def create_and_render_video(actor_url: str, total_duration: int, assets: list) -
         Optional[str]: The output URL if successful, None otherwise
     """
     # Create video JSON template
-    video_json = create_video_json(actor_url, total_duration, assets)
+    video_json = create_video_json(actor_url, total_duration, assets, captions_clip)
     
     # Initiate rendering
     render_id = render_video(video_json)
@@ -488,6 +492,445 @@ if __name__ == "__main__":
         "https://aiditor-uploads.s3.ap-south-1.amazonaws.com/uploads/3f7bbb22-7b7a-4023-9f42-058b66605b73.jpg"
     ]
 
-    output_url = create_and_render_video(actor_url, total_duration, assets)
+    caption_words = [
+          {
+            "start": 320,
+            "end": 432,
+            "word": "Welcome"
+          },
+          {
+            "start": 432,
+            "end": 568,
+            "word": "to"
+          },
+          {
+            "start": 568,
+            "end": 816,
+            "word": "Reels"
+          },
+          {
+            "start": 816,
+            "end": 1128,
+            "word": "AI"
+          },
+          {
+            "start": 1137,
+            "end": 1609,
+            "word": "Pro."
+          },
+          {
+            "start": 1737,
+            "end": 1977,
+            "word": "Want"
+          },
+          {
+            "start": 2001,
+            "end": 2137,
+            "word": "to"
+          },
+          {
+            "start": 2161,
+            "end": 2393,
+            "word": "create"
+          },
+          {
+            "start": 2449,
+            "end": 2873,
+            "word": "amazing"
+          },
+          {
+            "start": 2929,
+            "end": 3193,
+            "word": "video"
+          },
+          {
+            "start": 3249,
+            "end": 3457,
+            "word": "ads"
+          },
+          {
+            "start": 3481,
+            "end": 3593,
+            "word": "in"
+          },
+          {
+            "start": 3609,
+            "end": 3737,
+            "word": "a"
+          },
+          {
+            "start": 3761,
+            "end": 4445,
+            "word": "snap?"
+          },
+          {
+            "start": 4825,
+            "end": 5137,
+            "word": "Just"
+          },
+          {
+            "start": 5161,
+            "end": 5345,
+            "word": "visit"
+          },
+          {
+            "start": 5385,
+            "end": 5697,
+            "word": "Reels"
+          },
+          {
+            "start": 5761,
+            "end": 6129,
+            "word": "I"
+          },
+          {
+            "start": 6217,
+            "end": 6489,
+            "word": "Pro"
+          },
+          {
+            "start": 6537,
+            "end": 6769,
+            "word": "now"
+          },
+          {
+            "start": 6817,
+            "end": 6977,
+            "word": "and"
+          },
+          {
+            "start": 7001,
+            "end": 7161,
+            "word": "start"
+          },
+          {
+            "start": 7193,
+            "end": 7465,
+            "word": "crafting"
+          },
+          {
+            "start": 7505,
+            "end": 7657,
+            "word": "your"
+          },
+          {
+            "start": 7681,
+            "end": 7961,
+            "word": "first"
+          },
+          {
+            "start": 8032,
+            "end": 8289,
+            "word": "ad"
+          },
+          {
+            "start": 8337,
+            "end": 8929,
+            "word": "today."
+          },
+          {
+            "start": 9097,
+            "end": 9377,
+            "word": "For"
+          },
+          {
+            "start": 9401,
+            "end": 9513,
+            "word": "all"
+          },
+          {
+            "start": 9529,
+            "end": 9681,
+            "word": "you"
+          },
+          {
+            "start": 9713,
+            "end": 10089,
+            "word": "founders"
+          },
+          {
+            "start": 10137,
+            "end": 10273,
+            "word": "out"
+          },
+          {
+            "start": 10289,
+            "end": 10537,
+            "word": "there,"
+          },
+          {
+            "start": 10601,
+            "end": 10849,
+            "word": "this"
+          },
+          {
+            "start": 10897,
+            "end": 11105,
+            "word": "tool"
+          },
+          {
+            "start": 11145,
+            "end": 11297,
+            "word": "is"
+          },
+          {
+            "start": 11321,
+            "end": 11481,
+            "word": "a"
+          },
+          {
+            "start": 11513,
+            "end": 11729,
+            "word": "game"
+          },
+          {
+            "start": 11777,
+            "end": 12569,
+            "word": "changer."
+          },
+          {
+            "start": 12737,
+            "end": 13017,
+            "word": "So"
+          },
+          {
+            "start": 13041,
+            "end": 13153,
+            "word": "what"
+          },
+          {
+            "start": 13169,
+            "end": 13249,
+            "word": "are"
+          },
+          {
+            "start": 13257,
+            "end": 13401,
+            "word": "you"
+          },
+          {
+            "start": 13433,
+            "end": 13625,
+            "word": "waiting"
+          },
+          {
+            "start": 13665,
+            "end": 14153,
+            "word": "for?"
+          },
+          {
+            "start": 14289,
+            "end": 14489,
+            "word": "Get"
+          },
+          {
+            "start": 14497,
+            "end": 14665,
+            "word": "your"
+          },
+          {
+            "start": 14705,
+            "end": 14905,
+            "word": "ad"
+          },
+          {
+            "start": 14945,
+            "end": 15433,
+            "word": "on."
+          },
+          {
+            "start": 15569,
+            "end": 15977,
+            "word": "It's"
+          },
+          {
+            "start": 16041,
+            "end": 16457,
+            "word": "so"
+          },
+          {
+            "start": 16561,
+            "end": 17009,
+            "word": "easy."
+          },
+          {
+            "start": 17097,
+            "end": 17465,
+            "word": "Visit,"
+          },
+          {
+            "start": 17545,
+            "end": 18365,
+            "word": "generate,"
+          },
+          {
+            "start": 18705,
+            "end": 19281,
+            "word": "see,"
+          },
+          {
+            "start": 19393,
+            "end": 19945,
+            "word": "upload,"
+          },
+          {
+            "start": 20025,
+            "end": 20441,
+            "word": "select,"
+          },
+          {
+            "start": 20513,
+            "end": 20793,
+            "word": "and"
+          },
+          {
+            "start": 20849,
+            "end": 21473,
+            "word": "bam."
+          },
+          {
+            "start": 21649,
+            "end": 22129,
+            "word": "AI"
+          },
+          {
+            "start": 22177,
+            "end": 22385,
+            "word": "ad"
+          },
+          {
+            "start": 22425,
+            "end": 22617,
+            "word": "ready"
+          },
+          {
+            "start": 22641,
+            "end": 22777,
+            "word": "to"
+          },
+          {
+            "start": 22801,
+            "end": 23401,
+            "word": "roll."
+          },
+          {
+            "start": 23553,
+            "end": 23889,
+            "word": "Boost"
+          },
+          {
+            "start": 23937,
+            "end": 24121,
+            "word": "your"
+          },
+          {
+            "start": 24153,
+            "end": 24369,
+            "word": "product"
+          },
+          {
+            "start": 24417,
+            "end": 24817,
+            "word": "engagement"
+          },
+          {
+            "start": 24841,
+            "end": 25001,
+            "word": "with"
+          },
+          {
+            "start": 25033,
+            "end": 25441,
+            "word": "Reels"
+          },
+          {
+            "start": 25513,
+            "end": 25953,
+            "word": "AI"
+          },
+          {
+            "start": 26009,
+            "end": 26465,
+            "word": "Pro."
+          },
+          {
+            "start": 26585,
+            "end": 26881,
+            "word": "It's"
+          },
+          {
+            "start": 26913,
+            "end": 27153,
+            "word": "super"
+          },
+          {
+            "start": 27209,
+            "end": 27425,
+            "word": "smooth."
+          }
+        ]
+    
+    captions_clip = {
+      "id": "d9a40670-47ad-49e7-a65b-1130b2a8a393",
+      "type": "caption",
+      "name": "Caption",
+      "timeFrame": {
+        "start": 0,
+        "end": 30000
+      },
+      "position": {
+        "x": 540,
+        "y": 960,
+        "z": 10
+      },
+      "volume": 1,
+      "transform": {
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0
+      },
+      "size": {
+        "width": 500,
+        "height": 100
+      },
+      "captionProperties": {
+        "words": caption_words,
+        "highlightTextProperties": {
+          "fontSize": 80,
+          "color": "#FFFFFF",
+          "fontFamily": "Montserrat",
+          "fontWeight": 800,
+          "fontStyle": "normal",
+          "underline": False,
+          "backgroundColor": "#ff1414",
+          "padding": 8,
+          "strokeWidth": 4,
+          "strokeColor": "#000000"
+        },
+        "nonHighlightTextProperties": {
+          "fontSize": 60,
+          "color": "#ffffff",
+          "fontFamily": "Montserrat",
+          "fontWeight": 600,
+          "fontStyle": "normal",
+          "underline": False,
+          "padding": 0,
+          "strokeWidth": 4,
+          "borderWidth": 0,
+          "strokeColor": "#000000"
+        },
+        "textAlign": "center",
+        "maxWidth": 1080,
+        "maxWordsInFrame": 5
+      },
+        "textAlign": "center",
+        "maxWidth": 1080,
+        "maxWordsInFrame": 5
+    }
+
+    output_url = create_and_render_video(actor_url, total_duration, assets, captions_clip)
+    # create_video_json(actor_url, total_duration, assets, captions_clip)
     if output_url:
         print(f"\nFinal video URL: {output_url}")
